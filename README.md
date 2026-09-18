@@ -1,19 +1,7 @@
 # ML_PRO2026
 
 ```bash
-cd /tmp
-git clone https://github.com/The-FirstTime/ML_PRO2026.git
-cd ML_PRO2026
-git status
-ls
-```
-
-```bash
 uv run pytest
-```
-
-```bash
-kind create cluster --name mlpro
 ```
 
 ```bash
@@ -39,6 +27,12 @@ docker compose logs api
 docker compose logs db
 docker compose logs -f api
 ```
+
+
+```bash
+kind create cluster --name mlpro
+```
+
 
 ```bash
 docker compose down
