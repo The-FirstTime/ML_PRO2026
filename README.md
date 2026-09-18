@@ -1,32 +1,25 @@
 # ML_PRO2026
 
-## Проверка в Kubernetes
-
-Требуются запущенный Kubernetes-кластер и установленный `kubectl`. Для локального Docker Desktop Kubernetes образ `spam-service:1.0` должен быть доступен кластеру.
-
-Проверить текущий контекст и валидировать манифесты:
-
 ```bash
-kubectl config current-context
-kubectl apply --dry-run=client -f k8s/
+cd /tmp
+git clone https://github.com/The-FirstTime/ML_PRO2026.git
+cd ML_PRO2026
+git status
+ls
 ```
 
-Применить приложение:
-
 ```bash
-kubectl apply -f k8s/
-kubectl rollout status deployment/spam-service
-kubectl get pods -l app=spam
-kubectl get service spam-service
+uv run pytest
 ```
 
-Открыть API локально через port-forward:
-
 ```bash
-kubectl port-forward service/spam-service 8000:80
+kind create cluster --name mlpro
 ```
 
-В другом терминале проверить endpoints:
+```bash
+docker compose up -d --build
+docker compose ps
+```
 
 ```bash
 curl http://localhost:8000/health
@@ -36,15 +29,18 @@ curl -X POST http://localhost:8000/v1/predict \
 	--data @good.json
 ```
 
-При проблемах посмотреть состояние и логи:
-
 ```bash
-kubectl describe pods -l app=spam
-kubectl logs deployment/spam-service
+docker compose exec db psql -U postgres -d spam \
+	-c "SELECT request_id, model_version, score, spam, latency_ms FROM predictions;"
 ```
 
-Удалить приложение после проверки:
+```bash
+docker compose logs api
+docker compose logs db
+docker compose logs -f api
+```
 
 ```bash
-kubectl delete -f k8s/
+docker compose down
+docker compose down -v
 ```
