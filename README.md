@@ -38,3 +38,9 @@ kind create cluster --name mlpro
 docker compose down
 docker compose down -v
 ```
+
+##Ссылка на отчет:
+```url
+https://docs.google.com/document/d/1AWy_UTxFYShH4ozGbVsLSD4ZTn0ZN5yusoS8ODJhtpI/edit?usp=sharing
+```
+
