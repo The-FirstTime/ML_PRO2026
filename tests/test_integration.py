@@ -1,5 +1,6 @@
 import os
 
+from fastapi.testclient import TestClient
 import psycopg
 import pytest
 
@@ -11,12 +12,12 @@ pytestmark = [
 ]
 
 
-def test_prediction_is_logged(client, good_row):
+def test_prediction_is_logged(client: TestClient, good_row: dict[str, str]):
     body = client.post("/v1/predict", json=good_row).json()
 
     with psycopg.connect(DATABASE_URL) as conn:
         row = conn.execute(
-            "SELECT model_version, score, features->>'Contract' "
+            "SELECT model_version, score, features->>'text' "
             "FROM predictions WHERE request_id = %s",
             (body["request_id"],),
         ).fetchone()
@@ -24,4 +25,4 @@ def test_prediction_is_logged(client, good_row):
     assert row is not None
     assert row[0] == body["model_version"]
     assert row[1] == pytest.approx(body["score"])
-    assert row[2] == good_row["Contract"]
+    assert row[2] == good_row["text"]
