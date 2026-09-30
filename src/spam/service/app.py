@@ -1,14 +1,13 @@
 import time
 import uuid
-
 from contextlib import asynccontextmanager
 
 import joblib
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from spam.config import settings
 from spam import db
+from spam.config import settings
 
 
 class Features(BaseModel):
