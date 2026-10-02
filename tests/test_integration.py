@@ -2,6 +2,7 @@ import os
 
 import psycopg
 import pytest
+from fastapi.testclient import TestClient
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
