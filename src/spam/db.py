@@ -8,10 +8,11 @@ CREATE TABLE IF NOT EXISTS predictions (
 
     request_id uuid PRIMARY KEY,
     ts timestamptz NOT NULL DEFAULT now(),
-    model_version text NOT NULL,
+    model_version text,
     features json NOT NULL,
-    score double precision NOT NULL,
-    spam boolean NOT NULL,
+    score double precision,
+    spam boolean,
+    status_code integer NOT NULL DEFAULT 200,
     latency_ms real
 )
 """
@@ -21,23 +22,27 @@ def init() -> None:
         return
     with psycopg.connect(settings.database_url) as conn:
         conn.execute(DDL)
+        conn.execute("Select pg_advisory_xact_lock(1)") # блокировка на время миграции
 
 
 def save_prediction(
     request_id: str,
-    model_version: str,
     features: dict,
-    score: float,
-    spam: bool,
+    model_version: str | None = None,
+    score: float | None = None,
+    spam: bool | None = None,
+    status_code: int = 200,
     latency_ms: float | None = None,
 ) -> None:
     if settings.database_url is None:
         return
+
     with psycopg.connect(settings.database_url) as conn:
         conn.execute(
             """
-            INSERT INTO predictions (request_id, model_version, features, score, spam, latency_ms)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO predictions
+                (request_id, model_version, features, score, spam, status_code, latency_ms)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 request_id,
@@ -45,6 +50,10 @@ def save_prediction(
                 Json(features),
                 score,
                 spam,
+                status_code,
                 latency_ms,
             ),
         )
+
+
+#comment for pull request   
