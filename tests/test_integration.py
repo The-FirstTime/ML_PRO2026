@@ -11,7 +11,6 @@ pytestmark = [
 ]
 
 
-def test_prediction_is_logged(client, good_row: dict[str, str]):
 def test_prediction_is_logged(client, good_row):
     body = client.post("/v1/predict", json=good_row).json()
 
