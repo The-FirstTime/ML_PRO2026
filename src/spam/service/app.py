@@ -3,7 +3,9 @@ import uuid
 from contextlib import asynccontextmanager
 
 import joblib
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from spam import db
@@ -63,15 +65,46 @@ def predict(x: Features, bg: BackgroundTasks) -> Prediction:
     latency_ms = round((time.perf_counter() - t0) * 1000, 2)
 
     bg.add_task(
-    db.save_prediction,
-    request_id=request_id,
-    model_version=app.state.version,
-    features=payload,
-    score=score,
-    spam=score >= app.state.meta["threshold"],
-    latency_ms=latency_ms,
-)
+        db.save_prediction,
+        request_id=request_id,
+        model_version=app.state.version,
+        features=payload,
+        score=score,
+        spam=score >= app.state.meta["threshold"],
+        status_code=200,
+        latency_ms=latency_ms,
+    )
     spam = score >= app.state.meta["threshold"]
 
     return Prediction(score=score, spam=spam, model_version=app.state.version, request_id=request_id, latency_ms=latency_ms)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    request: Request,
+    exc: RequestValidationError,
+) -> JSONResponse:
+    try:
+        body = await request.json()
+    except ValueError:
+        body = {}
+
+    if not isinstance(body, dict):
+        body = {"body": body}
+
+    request_id = str(uuid.uuid4())
+
+    db.save_prediction(
+        request_id=request_id,
+        features=body,
+        status_code=422,
+    )
+
+    return JSONResponse(
+        status_code=422,
+        content={
+            "request_id": request_id,
+            "detail": exc.errors(),
+        },
+    )
 
