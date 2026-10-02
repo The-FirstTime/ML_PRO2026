@@ -4,7 +4,7 @@ metadata:
   name: spam-config
 data:
   LOG_LEVEL: "INFO"
-  MODEL_PATH: artifact/model_bundle.joblib
+  MODEL_PATH: artifacts/model_bundle.joblib
   MLFLOW_TRACKING_URI: http://mlflow.mlops:5000
   MODEL_NAME: spam
   MODEL_ALIAS: champion

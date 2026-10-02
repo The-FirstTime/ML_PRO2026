@@ -99,18 +99,21 @@ jobs:
       - name: сервис
         run: |
           kubectl apply -f k8s/
-          kubectl set image deploy/spam-classifier api="$IMAGE"
-          kubectl rollout status deploy/spam-classifier --timeout=180s
+          kubectl set image deploy/spam-service api="$IMAGE"
+          kubectl rollout status deploy/spam-service --timeout=180s
 
       - name: smoke
-        # через Ingress, как ходят пользователи: из сети kind узел виден по имени, Traefik слушает NodePort 30080
         run: |
-          kubectl port-forward svc/churn-service 8080:80 &
+          kubectl port-forward svc/spam-service 8080:80 &
           sleep 5
 
-          curl --fail -s localhost:8080/health; echo
+          curl --fail -s localhost:8080/health | tee health.json
+          echo
+
           curl --fail -s -X POST localhost:8080/v1/predict \
-            -H "Content-Type: application/json" -d @good.json; echo
+            -H "Content-Type: application/json" \
+            -d @good.json | tee pred.json
+          echo
 
           sleep 2
 
@@ -122,8 +125,8 @@ jobs:
         if: failure()
         run: |
           kubectl get pods -o wide
-          kubectl describe deploy/spam-classifier | tail -20
-          kubectl logs deploy/spam-classifier --tail=50 || true
+          kubectl describe deployment/spam-service
+          kubectl logs deployment/spam-service --all-containers=true --tail=50 || true
 
 
-# комментарий для пул реквеста
+#
