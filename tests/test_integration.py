@@ -2,7 +2,6 @@ import os
 
 import psycopg
 import pytest
-from fastapi.testclient import TestClient
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -12,12 +11,12 @@ pytestmark = [
 ]
 
 
-def test_prediction_is_logged(client: TestClient, good_row: dict[str, str]):
+def test_prediction_is_logged(client, good_row):
     body = client.post("/v1/predict", json=good_row).json()
 
     with psycopg.connect(DATABASE_URL) as conn:
         row = conn.execute(
-            "SELECT model_version, score, features->>'text' "
+            "SELECT model_version, score, features->>'Contract' "
             "FROM predictions WHERE request_id = %s",
             (body["request_id"],),
         ).fetchone()
@@ -48,3 +47,4 @@ def test_garbage_request_logs_422(client: TestClient):
         ).fetchone()
 
     assert row == (422, None, None, None)
+    assert row[2] == good_row["Contract"]
