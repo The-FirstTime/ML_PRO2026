@@ -74,3 +74,4 @@ def predict(x: Features, bg: BackgroundTasks) -> Prediction:
     spam = score >= app.state.meta["threshold"]
 
     return Prediction(score=score, spam=spam, model_version=app.state.version, request_id=request_id, latency_ms=latency_ms)
+
