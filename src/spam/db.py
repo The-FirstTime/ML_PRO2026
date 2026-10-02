@@ -22,6 +22,7 @@ def init() -> None:
         return
     with psycopg.connect(settings.database_url) as conn:
         conn.execute(DDL)
+        conn.execute("Select pg_advisory_xact_lock(7001)") # блокировка на время миграции
 
 
 def save_prediction(
