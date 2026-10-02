@@ -7,3 +7,7 @@ __pycache__/
 *.db
 *.sqlite
 *.sqlite3
+.git/
+.ruff_cache/
+.ipynb_checkpoints/
+*.ipynb
