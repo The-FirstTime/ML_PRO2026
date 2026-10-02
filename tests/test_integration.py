@@ -2,7 +2,6 @@ import os
 
 import psycopg
 import pytest
-from fastapi.testclient import TestClient
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -12,7 +11,7 @@ pytestmark = [
 ]
 
 
-def test_prediction_is_logged(client: TestClient, good_row: dict[str, str]):
+def test_prediction_is_logged(client, good_row: dict[str, str]):
     body = client.post("/v1/predict", json=good_row).json()
 
     with psycopg.connect(DATABASE_URL) as conn:
