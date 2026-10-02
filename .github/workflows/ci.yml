@@ -32,8 +32,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/setup-buildx-action@v4
-        with:
-          driver: default
       - uses: docker/build-push-action@v4
         with:
           context: .
