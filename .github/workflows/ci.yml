@@ -125,7 +125,7 @@ jobs:
           sleep 2
 
           RID=$(jq -r .request_id pred.json)
-          kubectl exec deploy/postgres -- psql -U post gres -d spam \
+          kubectl exec deploy/postgres -- psql -U postgres -d spam \
             -tAc "SELECT count(*) FROM predictions WHERE request_id = '$RID'" | grep -qx 1
 
       - name: диагностика
