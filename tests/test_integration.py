@@ -1,10 +1,8 @@
 import os
 
-
-from fastapi.testclient import TestClient
 import psycopg
 import pytest
-
+from fastapi.testclient import TestClient
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
