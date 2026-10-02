@@ -135,3 +135,6 @@ jobs:
           kubectl get ingress -A
           kubectl describe deploy/spam-classifier | tail -20
           kubectl logs deploy/spam-classifier --tail=50 || true
+
+
+# комментарий для пул реквеста
