@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   tests:
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7 
       - uses: astral-sh/setup-uv@v7
-        with: {uv-version: 3.11, enable-cache: true}
+        with: { enable-cache: true}
       - run: uv sync --frozen
       - run: uv run ruff check .
       - run: uv run pytest -v --maxfail=1 --disable-warnings
