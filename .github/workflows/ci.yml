@@ -16,7 +16,7 @@ jobs:
           --health-cmd "pg_isready -U postgres"
           --health-interval 5s --health-timeout 3s --health-retries 10
     env:
-      DATABASE_URL: postgresql://postgres:test@localhost:5432/spam
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/spam
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
@@ -125,4 +125,3 @@ jobs:
           kubectl describe deploy/spam-service | tail -20
           kubectl logs deploy/spam-service --tail=50 || true
 
-          
