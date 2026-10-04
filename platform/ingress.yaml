@@ -35,17 +35,17 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: churn-service
+  name: spam-service
 spec:
   ingressClassName: traefik
   rules:
-    - host: churn.localhost
+    - host: spam.localhost
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
-              service: {name: churn-service, port: {number: 80}}
+              service: {name: spam-service, port: {number: 80}}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
