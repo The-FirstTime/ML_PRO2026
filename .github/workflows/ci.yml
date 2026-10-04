@@ -129,4 +129,4 @@ jobs:
           kubectl logs deployment/spam-service --all-containers=true --tail=50 || true
 
 
-#ывпуфкрук
+
