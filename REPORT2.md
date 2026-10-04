@@ -2,7 +2,8 @@
 1. Хороший зеленый прогон:
 url = (https://github.com/The-FirstTime/ML_PRO2026/actions/runs/37069541025)
 2. Красный прогон с неверным путем к модели: 
-url = ()
+url = (https://github.com/The-FirstTime/ML_PRO2026/actions/runs/37187716007/job/111393374081)
+Я не стал делать еще два красных прогона.
 
 # Ответы на вопросы по CI/CD
 
