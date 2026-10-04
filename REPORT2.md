@@ -3,7 +3,18 @@
 url = (https://github.com/The-FirstTime/ML_PRO2026/actions/runs/37069541025)
 2. Красный прогон с неверным путем к модели: 
 url = (https://github.com/The-FirstTime/ML_PRO2026/actions/runs/37187716007/job/111393374081)
-Я не стал делать еще два красных прогона.
+3. Красный прогон с неверным именем в сикретРеф:
+url = (https://github.com/The-FirstTime/ML_PRO2026/actions/runs/37189305340)
+4. Красный прогон с недопустимой памятью:
+url = (https://github.com/The-FirstTime/ML_PRO2026/actions/runs/37189500814)
+
+Все зеленые прогоны после красных идут последовательно с именем "Ispravil"
+Во всех случаях падает джоба: deploy.
+Для плохо пути в логах вылезает: FileNotFoundError
+Для плохого сикретРефа вылезает: Error from server (BadRequest): container "api" in pod "spam-service-7994748cbf-gglqh" is waiting to start: trying and failing to pull image
+Для плохой памяти: диагностика вообще не запустилась, сервер не стартанул: Error from server (NotFound): deployments.apps "spam-service" not found
+
+
 
 # Ответы на вопросы по CI/CD
 
