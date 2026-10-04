@@ -127,3 +127,6 @@ jobs:
           kubectl get ingress -A
           kubectl describe deploy/spam-service | tail -20
           kubectl logs deploy/spam-service --tail=50 || true
+
+
+  #git push --force
