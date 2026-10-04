@@ -80,7 +80,9 @@ jobs:
 
       - name: образ в кластер
         run: |
-          docker pull "$IMAGE"
+          PLATFORM="$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}')"
+          echo "Loading image for platform: $PLATFORM"
+          docker pull --platform "$PLATFORM" "$IMAGE"
           kind load docker-image "$IMAGE" --name "$KIND_CLUSTER"
 
       - name: подтягиваем секреты
