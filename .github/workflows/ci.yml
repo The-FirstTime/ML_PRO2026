@@ -82,8 +82,14 @@ jobs:
         run: |
           PLATFORM="$(docker version --format '{{.Server.Os}}/{{.Server.Arch}}')"
           echo "Loading image for platform: $PLATFORM"
+
           docker pull --platform "$PLATFORM" "$IMAGE"
-          kind load docker-image "$IMAGE" --name "$KIND_CLUSTER"
+
+          LOCAL_IMAGE="spam-service:ci-${GITHUB_SHA}"
+          docker tag "$IMAGE" "$LOCAL_IMAGE"
+          kind load docker-image "$LOCAL_IMAGE" --name "$KIND_CLUSTER"
+
+          echo "LOCAL_IMAGE=$LOCAL_IMAGE" >> "$GITHUB_ENV"
 
       - name: подтягиваем секреты
         env:
@@ -102,7 +108,7 @@ jobs:
       - name: сервис
         run: |
           kubectl apply -f k8s/
-          kubectl set image deploy/spam-service api="$IMAGE"
+          kubectl set image deploy/spam-service api="$LOCAL_IMAGE"
           kubectl rollout status deploy/spam-service --timeout=180s
 
       - name: smoke
