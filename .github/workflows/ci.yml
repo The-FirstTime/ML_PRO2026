@@ -10,7 +10,10 @@ jobs:
     services:
       postgres:
         image: postgres:16
-        env: {POSTGRES_PASSWORD: test, POSTGRES_DB: spam}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres"
@@ -56,7 +59,7 @@ jobs:
     timeout-minutes: 10
     permissions: {contents: read, packages: read}
     env:
-      KIND_CLUSTER: sem3n
+      KIND_CLUSTER: sem3
     steps:
       - uses: actions/checkout@v7
       - run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:sha-${GITHUB_SHA}" >> "$GITHUB_ENV"
