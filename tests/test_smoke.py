@@ -28,3 +28,5 @@ def test_single_and_repeat_agree(client, good_row):
     s1 = client.post("/v1/predict", json=good_row).json()["score"]
     s2 = client.post("/v1/predict", json=good_row).json()["score"]
     assert abs(s1 - s2) < 1e-12
+
+
