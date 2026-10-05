@@ -68,9 +68,10 @@ jobs:
 
       - name: kind, kubectl и доступ к кластеру
         run: |
+          ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
           B=~/.local/bin && mkdir -p $B && echo "$B" >> "$GITHUB_PATH"
-          [ -x $B/kind ] || curl -sSLo $B/kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64
-          [ -x $B/kubectl ] || curl -sSLo $B/kubectl https://dl.k8s.io/v1.37.0/bin/linux/amd64/kubectl
+          [ -x $B/kind ] || curl -sSLo $B/kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-$ARCH
+          [ -x $B/kubectl ] || curl -sSLo $B/kubectl https://dl.k8s.io/v1.37.0/bin/linux/$ARCH/kubectl
           chmod +x $B/kind $B/kubectl
           $B/kind export kubeconfig --name "$KIND_CLUSTER" --internal
           $B/kubectl get nodes
