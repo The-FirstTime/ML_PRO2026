@@ -1,0 +1,13 @@
+{
+  "features": [
+    "text"
+  ],
+  "threshold": 0.8534,
+  "target_names": {
+    "0": "ham",
+    "1": "spam"
+  },
+  "n_train": 4457,
+  "data_rows": 5572,
+  "sklearn": "1.6.1"
+}
