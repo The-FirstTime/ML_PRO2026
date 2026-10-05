@@ -62,3 +62,5 @@ spec:
             pathType: Prefix
             backend:
               service: {name: monitoring-grafana, port: {number: 80}}
+              
+#commit posle ruchogo kubectl apply -f platform/ingress.yaml
