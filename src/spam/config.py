@@ -10,3 +10,6 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     model_config = {"env_file": ".env"}
+
+
+settings = Settings()
