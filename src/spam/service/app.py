@@ -3,6 +3,7 @@ import uuid
 from contextlib import asynccontextmanager
 
 import joblib
+from spam.model_store import load_model
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -28,10 +29,10 @@ class Prediction(BaseModel):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    bundle = joblib.load(settings.model_path)
-    app.state.pipeline = bundle["pipeline"]
-    app.state.meta = bundle["metadata"]
-    app.state.version = bundle["metadata"]["version"]
+    pipeline, meta, version = load_model()
+    app.state.pipeline = pipeline
+    app.state.meta = meta
+    app.state.version = version
 
     db.init()
     yield
